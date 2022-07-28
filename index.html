@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>Document</title>
+    <script src="fabric.min.js"></script>
+    <style>
+    .container{
+        display: flex;
+        margin-top:20px;
+        justify-content: center;
+        align-items: center;
+        
+    }
+
+    .form__upload {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  padding: 10rem;
+}
+.imgbtn{
+    position: relative;
+    top: 3rem;
+    width: 10rem;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 1.25rem 3rem !important;
+  font-size: 1.4rem !important;
+  background-color: #55c57a;
+  color: #fff;
+}
+.btncontainer{
+    display: flex;
+    justify-content: center;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="c"  width="800" height="500" ></canvas>
+    </div>
+   <div class="btncontainer">
+    <input
+        class="form__upload"
+        type="file"
+        accept="image/*"
+        id="photo"
+        name="photo"
+      
+      />
+      <label class="imgbtn" for="photo">Choose New Image</label>
+   </div>
+<script>
+const imgSelection = (src)=>{
+var canvas = new fabric.Canvas('c');
+fabric.Image.fromURL(src, function(myImg) {
+
+ var img1 = myImg.set({
+    left:160,
+    width: 650,
+    height: 600,
+ });
+ centeredScaling : true
+ myImg.scaleToWidth(500);
+ myImg.scaleToHeight(500);
+
+ canvas.add(img1); 
+});
+
+ canvas.on('mouse:wheel', function(opt) {
+  var delta = opt.e.deltaY;
+  var zoom = canvas.getZoom();
+  zoom *= 0.999 ** delta;
+  if (zoom > 20) zoom = 20;
+  if (zoom < 1) zoom = 1;
+  canvas.setZoom(zoom);
+  opt.e.preventDefault();
+  opt.e.stopPropagation();
+})
+
+}
+
+let pic = document.getElementById('photo')
+
+pic.addEventListener('change', (file) => {
+  const imgPreview =   URL.createObjectURL(event.target.files[0])
+  imgSelection(imgPreview)
+  });
+    
+    </script>
+</body>
+</html>
